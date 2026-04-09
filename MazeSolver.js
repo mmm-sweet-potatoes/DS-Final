@@ -12,7 +12,6 @@ const maze = [['#','#','#','#','#','#','#','#','#','#'],
               ['#','.','#','.','#','#','.','#','.','#'],
               ['#','.','.','.','#','.','.','.','.','#'],
               ['#','#','#','#','#','#','#','#','#','#']];
-
 // Function to locate the start (S) and finish (F) positions in the maze
 function findSAndF(maze) {
     let start = null;
@@ -34,8 +33,6 @@ function findSAndF(maze) {
     // Return both positions
     return { start, finish };
 }
-
-
 // Function to convert the maze into a graph (adjacency list)
 function buildGraph(maze) {
     const rows = maze.length;
@@ -89,129 +86,35 @@ function buildGraph(maze) {
     }
     return graph;
 }
-
-
-// BFS algorithm to find the shortest path from start to finish
-function solveMazeBFS(graph, start, finish) {
-
-    // Queue for BFS traversal
-    const queue = [start];
-
-    // Set to track visited nodes
-    const visited = new Set();
-
-    // Object to store parent of each node (used to reconstruct path)
-    const parent = {};
-
-    // Mark start as visited and initialize its parent
-    visited.add(start);
-    parent[start] = null;
-
-    // BFS loop
-    while (queue.length > 0) {
-
-        // Remove the first node from queue
-        const current = queue.shift();
-
-        // If we reached the goal, stop search
-        if (current === finish) {
-            break;
-        }
-
-        // Explore all neighbors of current node
-        for (let neighbor of graph[current]) {
-
-            // If neighbor has not been visited
-            if (!visited.has(neighbor)) {
-
-                // Mark as visited
-                visited.add(neighbor);
-
-                // Store how we reached this node
-                parent[neighbor] = current;
-
-                // Add to queue for further exploration
-                queue.push(neighbor);
-            }
-        }
+function DFSPossible(graph, currentNode, finalNode, visited, parent){
+  visited[currentNode] = true; 
+  if (currentNode == finalNode) {
+    return true;
+  }
+  for (let neighbourNode of graph[currentNode]){
+    if (visited[neighbourNode]) continue;
+    parent[neighbourNode] = currentNode;
+    if(DFSPossible(graph, neighbourNode, finalNode, visited, parent)){
+      return true;
     }
+  }
+  return false;
+}
+function DFSPath(parent, start, finish) {
+  let path = [];
+  let current = finish;
 
-    // If finish was never reached, no path exists
-    if (!visited.has(finish)) {
-        return null;
-    }
+  while (current !== undefined) {
+    path.push(current);
+    current = parent[current];
+  }
 
-    // Reconstruct shortest path from finish back to start
-    const path = [];
-    let current = finish;
-
-    while (current !== null) {
-        path.push(current);
-        current = parent[current]; // move backwards using parent links
-    }
-
-    // Reverse path to get start → finish order
-    path.reverse();
-
-    return path;
+  path.reverse();
+  return path;
 }
 
-
-// Function to visually mark the solution path in the maze
-function markPathOnMaze(maze, path) {
-
-    // Create a deep copy so original maze is not modified
-    const mazeCopy = maze.map(row => [...row]);
-
-    // Skip first and last (S and F), mark only intermediate path
-    for (let i = 1; i < path.length - 1; i++) {
-
-        // Convert "r,c" back to numbers
-        const [r, c] = path[i].split(',').map(Number);
-
-        // Replace '.' with '*'
-        if (mazeCopy[r][c] === '.') {
-            mazeCopy[r][c] = '*';
-        }
-    }
-
-    return mazeCopy;
-}
-
-
-// Function to print maze in readable format
-function printMaze(maze) {
-    for (let row of maze) {
-        console.log(row.join(' '));
-    }
-}
-
-
-// ===== MAIN EXECUTION =====
-
-// Find start and finish nodes
-const { start, finish } = findSAndF(maze);
-
-// Convert maze into graph
 const graph = buildGraph(maze);
-
-// Run BFS to find shortest path
-const shortestPath = solveMazeBFS(graph, start, finish);
-
-// Output results
-if (shortestPath) {
-
-    console.log("Shortest Path:", shortestPath);
-
-    // Number of steps is edges = nodes - 1
-    console.log("Number of steps:", shortestPath.length - 1);
-
-    // Mark path on maze and print it
-    const solvedMaze = markPathOnMaze(maze, shortestPath);
-
-    console.log("\nSolved Maze:");
-    printMaze(solvedMaze);
-
-} else {
-    console.log("No path found from S to F.");
-}
+const {start, finish} = findSAndF(maze);
+let visited = {};
+let parent = {};
+console.log(DFSPossible(graph, start, finish, visited, parent));
