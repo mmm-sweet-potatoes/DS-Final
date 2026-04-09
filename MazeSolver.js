@@ -13,21 +13,17 @@ const maze = [['#','#','#','#','#','#','#','#','#','#'],
               ['#','.','.','.','#','.','.','.','.','#'],
               ['#','#','#','#','#','#','#','#','#','#']];
 
-
 // Function to locate the start (S) and finish (F) positions in the maze
 function findSAndF(maze) {
     let start = null;
     let finish = null;
-
     // Iterate through every cell in the grid
     for (let r = 0; r < maze.length; r++) {
         for (let c = 0; c < maze[0].length; c++) {
-
             // If start is found, store its coordinates as a string
             if (maze[r][c] === 'S') {
                 start = `${r},${c}`;
             }
-
             // If finish is found, store its coordinates as a string
             if (maze[r][c] === 'F') {
                 finish = `${r},${c}`;
@@ -91,7 +87,6 @@ function buildGraph(maze) {
             }
         }
     }
-
     return graph;
 }
 
