@@ -25,7 +25,7 @@ function createGrid() {
       td.appendChild(input);
       tr.appendChild(td);
 
-      maze[r][c] = '.';
+      maze[r][c] = ' ';
     }
 
     table.appendChild(tr);
@@ -75,10 +75,10 @@ function resetMaze() {
 function convertMaze(inputMaze) {
   return inputMaze.map(row =>
     row.map(cell => {
-      if (cell === 'W') return '#';
+      if (cell === 'W') return 'W';
       if (cell === 'S') return 'S';
       if (cell === 'F') return 'F';
-      return '.'; // FIXED
+      return ' '; // FIXED
     })
   );
 }
@@ -94,7 +94,7 @@ function colourSolvedMaze(solved) {
 
       td.className = "";
 
-      if (val === "#") td.classList.add("wall"); // FIXED
+      if (val === "W") td.classList.add("wall"); // FIXED
       else if (val === "S") td.classList.add("start");
       else if (val === "F") td.classList.add("finish");
       else if (val === "P") td.classList.add("path");
