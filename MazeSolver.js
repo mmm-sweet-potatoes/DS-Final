@@ -21,9 +21,7 @@ function findSAndF(maze) {
 function buildGraph(maze) {
     const rows = maze.length;
     const cols = maze[0].length;
-
     const graph = {};
-
     const directions = [
         [1, 0],
         [-1, 0],
@@ -36,13 +34,12 @@ function buildGraph(maze) {
                r < rows &&
                c >= 0 &&
                c < cols &&
-               maze[r][c] !== '#';
+               maze[r][c] !== 'W';
     }
 
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-
-            if (maze[r][c] === '#') continue;
+            if (maze[r][c] === 'W') continue;
 
             const node = `${r},${c}`;
             graph[node] = [];
